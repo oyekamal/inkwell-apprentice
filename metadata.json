@@ -1,0 +1,5 @@
+{
+  "name": "Inkwell Apprentice",
+  "description": "An AI-powered application to learn black ink pen drawing. Select a theme and skill level to generate a printable, multi-page PDF with progressive lessons, featuring example drawings and guided practice sheets.",
+  "requestFramePermissions": []
+}
