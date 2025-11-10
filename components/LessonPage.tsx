@@ -23,7 +23,9 @@ export const LessonPage: React.FC<LessonPageProps> = ({ lesson, theme, level, pa
           <h3 className="text-center font-semibold text-gray-700 mb-4 border-b pb-2">Example Drawing</h3>
           <div className="flex-grow flex items-center justify-center p-4 border border-dashed border-gray-300 bg-gray-50 rounded-lg">
             <img 
-              src={`data:image/png;base64,${lesson.imageBase64}`} 
+              src={lesson.imageBase64.startsWith('<svg') 
+                ? `data:image/svg+xml;base64,${lesson.imageBase64}` 
+                : `data:image/png;base64,${lesson.imageBase64}`} 
               alt={lesson.subject} 
               className="max-w-full max-h-full object-contain"
             />
@@ -35,7 +37,9 @@ export const LessonPage: React.FC<LessonPageProps> = ({ lesson, theme, level, pa
           <h3 className="text-center font-semibold text-gray-700 mb-4 border-b pb-2">Practice Area</h3>
           <div className="flex-grow flex items-center justify-center p-4 border border-dashed border-gray-300 bg-gray-50 rounded-lg relative">
             <img 
-              src={`data:image/png;base64,${lesson.imageBase64}`} 
+              src={lesson.imageBase64.startsWith('<svg') 
+                ? `data:image/svg+xml;base64,${lesson.imageBase64}` 
+                : `data:image/png;base64,${lesson.imageBase64}`} 
               alt={`Practice guide for ${lesson.subject}`} 
               className="max-w-full max-h-full object-contain opacity-20"
             />

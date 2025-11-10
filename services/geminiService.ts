@@ -67,6 +67,23 @@ export const generateCourseExercises = async (lessonTitle: string, lessonContent
   }
 };
 
+// Function to create a placeholder image as base64
+const createPlaceholderImage = (subject: string): string => {
+  // Create a simple SVG placeholder image
+  const svg = `<svg width="300" height="400" xmlns="http://www.w3.org/2000/svg">
+    <rect width="300" height="400" fill="white" stroke="black" stroke-width="2"/>
+    <text x="150" y="180" text-anchor="middle" font-family="serif" font-size="16" fill="black">Drawing Placeholder</text>
+    <text x="150" y="200" text-anchor="middle" font-family="serif" font-size="12" fill="gray">${subject}</text>
+    <text x="150" y="220" text-anchor="middle" font-family="serif" font-size="10" fill="gray">Enable Imagen API billing</text>
+    <text x="150" y="235" text-anchor="middle" font-family="serif" font-size="10" fill="gray">to generate AI drawings</text>
+    <circle cx="150" cy="280" r="30" fill="none" stroke="black" stroke-width="2"/>
+    <path d="M130 270 L150 290 L170 270" stroke="black" stroke-width="2" fill="none"/>
+  </svg>`;
+  
+  // Convert SVG to base64
+  return btoa(unescape(encodeURIComponent(svg)));
+};
+
 export const generateDrawing = async (subject: string, theme: string, level: string): Promise<string> => {
   const prompt = `A professional, clean, artistic, minimalist black ink pen drawing of "${subject}".
 Style: High-contrast, beautiful fine line art, monochrome, elegant composition. The drawing should be isolated on a pure white background.
@@ -91,6 +108,15 @@ No text, no watermarks, no signatures, no colored elements.`;
     }
   } catch (error) {
     console.error("Error generating drawing:", error);
-    throw new Error(`Failed to generate the drawing for "${subject}".`);
+    
+    // Check if it's a billing-related error
+    if (error instanceof Error && error.message.includes('billed users')) {
+      console.warn(`Imagen API requires billing. Using placeholder for "${subject}"`);
+      return createPlaceholderImage(subject);
+    }
+    
+    // For other errors, also provide a placeholder but with error info
+    console.warn(`Image generation failed for "${subject}". Using placeholder.`);
+    return createPlaceholderImage(subject);
   }
 };
